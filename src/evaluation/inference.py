@@ -100,12 +100,10 @@ def post_process_and_sort(rows) -> pd.DataFrame:
 
 
 def debug_single_query(pipeline: SearchPipeline, query_id="q1", text="test query"):
-    print(f"\n=== DEBUG RETRIEVAL FOR: {query_id} ('{text}') ===")
     dense_res = pipeline.dense_retriever.search(text, top_k=2)
     hybrid_res = pipeline.hybrid_retriever.search(text, top_k=2)
     print(f"Cấu trúc Dense mẫu:  {dense_res}")
     print(f"Cấu trúc Hybrid mẫu: {hybrid_res}")
-    print("==================================================\n")
 
 
 def main():
