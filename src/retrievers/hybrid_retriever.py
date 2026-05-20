@@ -11,15 +11,18 @@ class HybridRetriever:
         self.sparse = sparse_retriever
         self.rrf_k = rrf_k
 
-    def search(self, query: str, top_k: int = 10) -> list[tuple[str, float]]:
+    def search(self, query: str, top_k: int = 10) -> list[dict]:
         logger.info("Running hybrid retrieval: top_k=%s query=%r", top_k, query)
+
         dense_results = self.dense.search(query, top_k)
         sparse_results = self.sparse.search(query, top_k)
+
         logger.info(
             "Fusing rankings: dense_results=%s sparse_results=%s",
             len(dense_results),
             len(sparse_results),
         )
+
         fusion_scores = reciprocal_rank_fusion(
             [dense_results, sparse_results],
             k=self.rrf_k,
@@ -30,5 +33,15 @@ class HybridRetriever:
             key=lambda item: item[1],
             reverse=True,
         )[:top_k]
-        logger.info("Hybrid retrieval complete: results=%s", len(results))
-        return results
+
+        formatted_results = [
+            {
+                "doc_id": doc_id,
+                "score": float(score),
+            }
+            for doc_id, score in results
+        ]
+
+        logger.info("Hybrid retrieval complete: results=%s", len(formatted_results))
+
+        return formatted_results
