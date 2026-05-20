@@ -1,10 +1,10 @@
-# Truy xuất thông tin bài báo khoa học
+﻿# Hệ thống tìm kiếm linh hoạt cho bài báo khoa học
 
 ## 1. Bài toán
 
-Đồ án xây dựng một hệ thống truy xuất thông tin (Information Retrieval - IR) cho tập bài báo khoa học lấy từ arXiv. Người dùng nhập một câu truy vấn ngắn, ví dụ như "neural machine translation", "document ranking methods" hoặc "dense passage retrieval", hệ thống sẽ trả về danh sách các bài báo liên quan nhất trong kho dữ liệu.
+Đồ án xây dựng một hệ thống tìm kiếm linh hoạt cho bài báo khoa học. Người dùng nhập một câu truy vấn ngắn, ví dụ như "neural machine translation", "document ranking methods" hoặc "dense passage retrieval", hệ thống sẽ trả về danh sách các bài báo liên quan nhất trong kho dữ liệu.
 
-Mục tiêu chính của hệ thống không phải là sinh câu trả lời tự nhiên như chatbot, mà là đánh giá và so sánh các phương pháp truy xuất tài liệu. Vì vậy, đầu vào và đầu ra của hệ thống được xác định như sau:
+Mục tiêu chính của hệ thống là tìm kiếm được các bài báo theo các phương pháp khác nhau tùy thuộc vào cài đặt thuật toán truy cuất của người dùng. Vì vậy, đầu vào và đầu ra của hệ thống được xác định như sau:
 
 - Đầu vào: một truy vấn tìm kiếm bằng tiếng Anh.
 - Đầu ra: danh sách Top-K bài báo liên quan, mỗi kết quả gồm mã bài báo, điểm xếp hạng và thứ tự trong danh sách trả về.
@@ -89,13 +89,13 @@ Ngoài ra còn có các cụm ngữ cảnh như:
 Tập query được thiết kế có độ dài từ 1 đến 6 từ. Phân phối độ dài query:
 
 | Độ dài query | Số lượng |
-| ------------ | -------: |
-| 1 từ         |       35 |
-| 2 từ         |       60 |
-| 3 từ         |       90 |
-| 4 từ         |       60 |
-| 5 từ         |       35 |
-| 6 từ         |       20 |
+|---|---:|
+| 1 từ | 35 |
+| 2 từ | 60 |
+| 3 từ | 90 |
+| 4 từ | 60 |
+| 5 từ | 35 |
+| 6 từ | 20 |
 
 Tổng cộng hệ thống sinh 300 truy vấn và lưu vào:
 
@@ -124,11 +124,11 @@ Sau đó, kết quả được lọc theo các điều kiện:
 
 Với mỗi query, hệ thống thu thập tối đa 50 tài liệu liên quan. Vì arXiv API đã trả kết quả theo thứ tự relevance, nhóm chuyển thứ hạng thành nhãn liên quan có mức độ:
 
-| Thứ hạng trong kết quả arXiv | Nhãn relevance | Ý nghĩa       |
-| ---------------------------- | -------------: | ------------- |
-| 1-6                          |              3 | Rất liên quan |
-| 7-21                         |              2 | Liên quan     |
-| 22-50                        |              1 | Liên quan yếu |
+| Thứ hạng trong kết quả arXiv | Nhãn relevance | Ý nghĩa |
+|---|---:|---|
+| 1-6 | 3 | Rất liên quan |
+| 7-21 | 2 | Liên quan |
+| 22-50 | 1 | Liên quan yếu |
 
 Tập relevance judgments được lưu tại:
 
@@ -154,10 +154,10 @@ Các bước chính:
 
 1. Chuẩn hóa `id` bài báo thành `doc_id`, loại bỏ phần URL hoặc version không cần thiết nếu có.
 2. Làm sạch title và abstract:
-    - loại bỏ biểu thức citation dạng `\cite{...}`;
-    - loại bỏ reference dạng `\ref{...}`;
-    - loại bỏ URL LaTeX dạng `\url{...}`;
-    - chuẩn hóa khoảng trắng.
+   - loại bỏ biểu thức citation dạng `\cite{...}`;
+   - loại bỏ reference dạng `\ref{...}`;
+   - loại bỏ URL LaTeX dạng `\url{...}`;
+   - chuẩn hóa khoảng trắng.
 3. Tạo trường `text` dùng cho retrieval bằng cách ghép:
 
 ```text
@@ -396,11 +396,11 @@ results/full_evaluation_report.csv
 Một số chỉ số tiêu biểu:
 
 | Phương pháp | nDCG@10 | Precision@10 | Recall@50 | MAP@10 |
-| ----------- | ------: | -----------: | --------: | -----: |
-| BM25        |  0.1284 |       0.1663 |    0.0948 | 0.0258 |
-| Hybrid      |  0.1004 |       0.1347 |    0.0809 | 0.0167 |
-| Rerank      |  0.0788 |       0.1143 |    0.0759 | 0.0125 |
-| Dense       |  0.0502 |       0.0677 |    0.0419 | 0.0075 |
+|---|---:|---:|---:|---:|
+| BM25 | 0.1284 | 0.1663 | 0.0948 | 0.0258 |
+| Hybrid | 0.1004 | 0.1347 | 0.0809 | 0.0167 |
+| Rerank | 0.0788 | 0.1143 | 0.0759 | 0.0125 |
+| Dense | 0.0502 | 0.0677 | 0.0419 | 0.0075 |
 
 Kết quả cho thấy BM25 là phương pháp tốt nhất trong benchmark hiện tại. BM25 đạt điểm cao nhất ở cả nDCG@10, Precision@10, Recall@50 và MAP@10.
 

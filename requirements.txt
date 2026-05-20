@@ -10,7 +10,9 @@ matplotlib
 tqdm 
 pyarrow==15.0.2
 feedparser
+torch==2.8.0
 faiss-cpu 
 sentence-transformers 
 fastapi
 uvicorn
+rank_bm25
