@@ -1,0 +1,16 @@
+numpy
+pandas
+scikit-learn
+nltk
+spacy
+pymupdf
+pdfplumber
+seaborn
+matplotlib
+tqdm 
+pyarrow==15.0.2
+feedparser
+faiss-cpu 
+sentence-transformers 
+fastapi
+uvicorn
