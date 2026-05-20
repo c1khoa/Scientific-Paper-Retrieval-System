@@ -5,10 +5,6 @@ import pandas as pd
 from tqdm import tqdm
 import logging
 
-logging.basicConfig(level=logging.WARNING)
-for logger_name in list(logging.root.manager.loggerDict.keys()):
-    logging.getLogger(logger_name).setLevel(logging.WARNING)
-
 sys.path.append("..")
 
 from src.config.paths import BM25_PATH, DOC_IDS_PATH, FAISS_INDEX_PATH, RUN_DENSE, RUN_BM25, RUN_HYBRID, RUN_RERANK
