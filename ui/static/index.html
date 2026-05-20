@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Paper Searching</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="search-hero" aria-label="Paper search">
+        <div class="brand">
+          <span>Paper Search</span>
+        </div>
+
+        <form id="searchForm" class="search-form">
+          <div class="search-box">
+            <input
+              id="queryInput"
+              name="query"
+              type="search"
+              autocomplete="off"
+              placeholder="Search papers by method, topic, dataset..."
+              aria-label="Search query"
+              required
+            />
+            <button type="submit">Search</button>
+          </div>
+
+          <div class="controls" aria-label="Search settings">
+            <label>
+              Method
+              <select id="methodSelect" name="method">
+                <option value="hybrid" selected>Hybrid</option>
+                <option value="rerank">Rerank</option>
+                <option value="dense">Dense</option>
+                <option value="bm25">BM25</option>
+              </select>
+            </label>
+
+            <label>
+              Results
+              <select id="topKSelect" name="top_k">
+                <option value="5">5</option>
+                <option value="10" selected>10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+              </select>
+            </label>
+          </div>
+        </form>
+      </section>
+
+      <section class="result-meta" aria-live="polite">
+        <p id="statusText">Ready to search your paper index.</p>
+      </section>
+
+      <section id="results" class="results" aria-label="Search results"></section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
