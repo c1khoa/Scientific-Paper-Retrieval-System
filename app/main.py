@@ -10,7 +10,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.evaluation.inference import SearchPipeline
 from src.utils.logging import get_logger
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1" 
 
 logger = get_logger(__name__)
 
@@ -20,7 +19,7 @@ models = {}
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Quản lý vòng đời ứng dụng: Tự động nạp index/model lên RAM khi bật server."""
-    logger.info("⏳ Đang nạp toàn bộ chỉ mục (Index) và Mô hình lên bộ nhớ RAM...")
+    logger.info("Đang nạp toàn bộ chỉ mục (Index) và Mô hình lên bộ nhớ RAM...")
     try:
         pipeline = SearchPipeline()
         # Khởi khởi tạo các bộ tìm kiếm từ mã nguồn src của bạn
@@ -28,17 +27,15 @@ async def lifespan(app: FastAPI):
         models["dense"] = pipeline.dense_retriever
         models["hybrid"] = pipeline.hybrid_retriever
         models["rerank"] = pipeline.reranker
-        logger.info("✅ Nạp tài nguyên thành công. API đã sẵn sàng phục vụ!")
     except Exception as e:
-        logger.error("❌ Lỗi nghiêm trọng khi nạp tài nguyên: %s", str(e))
+        logger.error("Lỗi nạp tài nguyên: %s", str(e))
         raise e
     yield
     # Giải phóng tài nguyên khi tắt server (nếu cần)
     models.clear()
 
 app = FastAPI(
-    title="arXiv Information Retrieval System",
-    description="Hệ thống Tìm kiếm Ngữ nghĩa & Tái xếp hạng các bài báo khoa học arXiv (CS.AI, CS.CL, CS.IR, CS.LG)",
+    title="Paper Retrieval System",
     version="1.0.0",
     lifespan=lifespan
 )
@@ -50,7 +47,7 @@ class SearchRequest(BaseModel):
 
 # --- CÁC ENDPOINT TÌM KIẾM ---
 
-@app.post("/search/bm25", tags=["Retrieval"])
+@app.post("/search/bm25", tags=["BM25"])
 async def search_bm25(request: SearchRequest):
     try:
         # Gọi hàm tìm kiếm thực tế từ instance của BM25Retriever
@@ -59,7 +56,7 @@ async def search_bm25(request: SearchRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/search/dense", tags=["Retrieval"])
+@app.post("/search/dense", tags=["E5-Embedding"])
 async def search_dense(request: SearchRequest):
     try:
         results = models["dense"].search(request.query, top_k=request.top_k)
@@ -67,7 +64,7 @@ async def search_dense(request: SearchRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/search/hybrid", tags=["Retrieval"])
+@app.post("/search/hybrid", tags=["Hybrid RFF"])
 async def search_hybrid(request: SearchRequest):
     try:
         results = models["hybrid"].search(request.query, top_k=request.top_k)
@@ -75,7 +72,7 @@ async def search_hybrid(request: SearchRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/search/rerank", tags=["Reranking"])
+@app.post("/search/rerank", tags=["Hybrid Rerank"])
 async def search_rerank(request: SearchRequest):
     try:
         results = models["rerank"].search(request.query, top_k=request.top_k)
