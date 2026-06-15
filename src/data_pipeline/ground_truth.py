@@ -49,50 +49,26 @@ df.to_parquet(DATASET_PARQUET, index=False)
 print("Saved:", DATASET_PARQUET)
 
 topics = [
-    "neural machine translation",
-    "information retrieval",
-    "document ranking",
-    "transformer language models",
-    "contrastive learning",
-    "question answering",
-    "document retrieval",
-    "large language models",
-    "multilingual NLP",
-    "neural search",
-    "deep learning optimization",
-    "scientific paper recommendation",
-    "semantic similarity",
-    "knowledge graph reasoning",
-    "dense passage retrieval",
-    "self supervised learning",
-    "text classification",
-    "topic modeling",
-    "document clustering",
-    "neural reranking",
-    "representation learning",
-    "language understanding",
-    "cross lingual retrieval",
-    "neural embeddings",
+    "neural machine translation", "information retrieval", "document ranking",
+    "transformer language models", "contrastive learning", "question answering",
+    "document retrieval", "large language models", "multilingual NLP",
+    "neural search", "deep learning optimization", "scientific paper recommendation",
+    "semantic similarity", "knowledge graph reasoning", "dense passage retrieval",
+    "self supervised learning", "text classification", "topic modeling",
+    "document clustering", "neural reranking", "representation learning",
+    "language understanding", "cross lingual retrieval", "neural embeddings"
 ]
 
 tasks = [
-    "models",
-    "methods",
-    "approaches",
-    "systems",
-    "techniques",
-    "algorithms",
+    "models", "methods", "approaches", 
+    "systems", "techniques", "algorithms"
 ]
 
 contexts = [
-    "for academic search",
-    "for scientific papers",
-    "for research literature",
-    "in large scale datasets",
-    "for multilingual corpora",
-    "in neural IR systems",
-    "for NLP benchmarks",
-    "in academic recommender systems",
+    "for academic search", "for scientific papers", 
+    "for research literature", "in large scale datasets",
+    "for multilingual corpora", "in neural IR systems", 
+    "for NLP benchmarks", "in academic recommender systems"
 ]
 
 length_distribution = [

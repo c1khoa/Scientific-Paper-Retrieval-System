@@ -3,11 +3,14 @@ __pycache__/
 *.pyc
 
 # Dataset
-data/
+data/ground_truth
+data/preprocessed
+data/raw
 datasets/
 
 # Model / output
 models/
+reports/
 checkpoints/
 results/
 logs/
